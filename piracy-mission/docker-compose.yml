@@ -1,0 +1,95 @@
+version: '2'
+
+services:
+ crc:
+  image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
+  mac_address: 00:18:8B:0D:4F:0B
+  networks:
+  - training
+ 
+ web:
+  image: app-docker136.hex.tno.nl:443/pitch/web:2.1.1
+  ports:
+  - "8080:8080"
+  networks:
+  - training
+  environment:
+  - constraint:node==app-docker01.hex.tno.nl
+  
+ vrf:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
+  mac_address: 8C:70:5A:0B:58:7E
+  hostname: mak
+  environment:
+  - MINSLEEP=5
+  - DISPLAY=xserver:0
+  - constraint:node==app-docker02.hex.tno.nl
+  
+ pacer:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/pacer:pi
+  command: -f Pacer
+  environment:
+  - MINSLEEP=0
+  - ADVERTISED_ADDRESS=app-docker01.hex.tno.nl:8081
+  - constraint:node==app-docker01.hex.tno.nl
+  ports:
+  - "8081:8080"
+
+ kml:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer -i http://app-docker01.hex.tno.nl:8082 -c pitch-logicaltime.config
+  environment:
+  - constraint:node==app-docker01.hex.tno.nl
+  ports:
+  - "8082:8080"
+ 
+ damsim:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/damageserver:pi
+  command: -f DamageServer -c pitch-logicaltime.config
+
+ sensor:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/sensorserver:pi
+  command: -f SensorServer -timemanaged
+#  volumes:
+#  - ./sensor.properties:/root/application/sensorfederate.properties
+
+ xclient:
+  extends:
+   file: base-service.yml
+   service: base-simservice
+  image: app-docker136.hex.tno.nl:443/msaas-nld/start:pi
+  environment:
+  - DISPLAY=xserver:0
+
+ xserver:
+  image: app-docker136.hex.tno.nl:443/library/xserver
+  ports:
+  - "8083:8080"
+  environment:
+  - constraint:node==app-docker01.hex.tno.nl
+  networks:
+  - training
+
+networks:
+ training:  
+  driver: overlay
+  ipam:
+   config:
+   - subnet: 10.11.0.0/24
+     gateway: 10.11.0.1
+
