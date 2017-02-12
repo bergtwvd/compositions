@@ -46,7 +46,7 @@ services:
    file: base-service.yml
    service: base-simservice
   image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
-  command: -f KMLServer -i http://app-docker03.hex.tno.nl:443 -c pitch-logicaltime.config
+  command: -f KMLServer -i http://app-docker03.hex.tno.nl:443/kmlserver -c pitch-logicaltime.config
   environment:
   - constraint:node==app-docker03.hex.tno.nl
   ports:
