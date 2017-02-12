@@ -10,11 +10,11 @@ services:
  web:
   image: app-docker136.hex.tno.nl:443/pitch/web:2.1.1
   ports:
-  - "8080:8080"
+  - "30003:8080"
   networks:
   - training
   environment:
-  - constraint:node==app-docker01.hex.tno.nl
+  - constraint:node==app-docker03.hex.tno.nl
   
  vrf:
   extends:
@@ -24,9 +24,9 @@ services:
   mac_address: 8C:70:5A:0B:58:7E
   hostname: mak
   environment:
-  - MINSLEEP=5
   - DISPLAY=xserver:0
-  - constraint:node==app-docker02.hex.tno.nl
+  networks:
+  - x11
   
  pacer:
   extends:
@@ -35,22 +35,21 @@ services:
   image: app-docker136.hex.tno.nl:443/msaas-nld/pacer:pi
   command: -f Pacer
   environment:
-  - MINSLEEP=0
-  - ADVERTISED_ADDRESS=app-docker01.hex.tno.nl:8081
-  - constraint:node==app-docker01.hex.tno.nl
+  - ADVERTISED_ADDRESS=app-docker03.hex.tno.nl:443
+  - constraint:node==app-docker03.hex.tno.nl
   ports:
-  - "8081:8080"
+  - "30002:8080"
 
  kml:
   extends:
    file: base-service.yml
    service: base-simservice
   image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
-  command: -f KMLServer -i http://app-docker01.hex.tno.nl:8082 -c pitch-logicaltime.config
+  command: -f KMLServer -i http://app-docker03.hex.tno.nl:443 -c pitch-logicaltime.config
   environment:
-  - constraint:node==app-docker01.hex.tno.nl
+  - constraint:node==app-docker03.hex.tno.nl
   ports:
-  - "8082:8080"
+  - "30001:8080"
  
  damsim:
   extends:
@@ -65,8 +64,6 @@ services:
    service: base-simservice
   image: app-docker136.hex.tno.nl:443/msaas-nld/sensorserver:pi
   command: -f SensorServer -timemanaged
-#  volumes:
-#  - ./sensor.properties:/root/application/sensorfederate.properties
 
  xclient:
   extends:
@@ -75,21 +72,16 @@ services:
   image: app-docker136.hex.tno.nl:443/msaas-nld/start:pi
   environment:
   - DISPLAY=xserver:0
-
- xserver:
-  image: app-docker136.hex.tno.nl:443/library/xserver
-  ports:
-  - "8083:8080"
-  environment:
-  - constraint:node==app-docker01.hex.tno.nl
   networks:
-  - training
+  - x11
 
 networks:
  training:  
   driver: overlay
   ipam:
    config:
-   - subnet: 10.11.0.0/24
-     gateway: 10.11.0.1
-
+   - subnet: 10.12.0.0/24
+     gateway: 10.12.0.1
+ x11:
+  external:
+   name: xserver_x11
