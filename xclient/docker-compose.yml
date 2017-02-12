@@ -21,10 +21,6 @@ services:
    file: base-service.yml
    service: base-simservice
   image: app-docker136.hex.tno.nl:443/msaas-nld/start:pi
-  environment:
-  - DISPLAY=xserver:0
-  networks:
-  - x11
 
 networks:
  training:  
@@ -33,6 +29,5 @@ networks:
    config:
    - subnet: 10.11.0.0/24
      gateway: 10.11.0.1
- x11:
-  external: true
+
 
