@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+ xserver:
+  image: app-docker136.hex.tno.nl:443/library/xserver
+  ports:
+  - "9080:8080"
+  environment:
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - x11
+
+networks:
+ x11:  
+  driver: overlay

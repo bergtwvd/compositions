@@ -3,10 +3,6 @@ version: '2'
 services:
  base-simservice:
   environment:
-  - MINSLEEP=10
-  - FEDERATIONNAME=${COMPOSE_PROJECT_NAME}
   - PITCH_LRCADAPTER=10.11.0
   networks:
   - training
-
-
