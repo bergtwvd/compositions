@@ -4,7 +4,7 @@ services:
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
-  - "9080:8080"
+  - "30000:8080"
   environment:
   - constraint:node==app-docker03.hex.tno.nl
   networks:
