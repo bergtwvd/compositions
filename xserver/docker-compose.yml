@@ -13,4 +13,3 @@ services:
 networks:
  x11:  
   driver: overlay
-  name: x11
