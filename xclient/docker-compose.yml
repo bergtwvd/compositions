@@ -10,7 +10,7 @@ services:
  web:
   image: app-docker136.hex.tno.nl:443/pitch/web:2.1.1
   ports:
-  - "8080:8080"
+  - "30003:8080"
   networks:
   - training
   environment:
