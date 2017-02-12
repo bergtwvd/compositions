@@ -13,3 +13,5 @@ services:
 networks:
  x11:  
   driver: overlay
+  external:
+   name: x11
