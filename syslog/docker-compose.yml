@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+ log:
+  image: app-docker136.hex.tno.nl:443/library/syslog
+  container_name: syslog
+  ports:
+  - "33333:514"
+  environment:
+  - constraint:node==app-docker01.hex.tno.nl
+  
