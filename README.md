@@ -1,2 +1,2 @@
 # compositions
-Docker Compositions
+Docker MSaaS Compositions
