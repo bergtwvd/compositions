@@ -1,0 +1,79 @@
+version: '2'
+
+# Example of a time managed simulation composition, where
+# - the pacer is used as master (boot) application
+# - each LRC only starts the federate application if the master is up
+# - the host address is assumed to be 10.10.10.11  (so, change this accordingly)
+
+services:
+ crc:
+  image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
+  mac_address: 00:18:8B:0D:4F:0B
+  environment:
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+
+ web:
+  image: app-docker136.hex.tno.nl:443/pitch/web:2.1.1
+  ports:
+  - "30003:8080"
+  environment:
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+  
+ kml:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer -iconurl http://app-docker03.hex.tno.nl:443/kmlserver -c pitch-logicaltime.config
+  ports:
+  - "30001:8080"
+  environment:
+  - LRC_MASTERHOST=pacer
+  - LRC_MASTERPORT=6666
+  - PITCH_LRCADAPTER=10.12.0
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+  
+ shipsim:
+  image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
+  command: -f ShipSim --timemanaged
+  environment:
+  - LRC_MASTERHOST=pacer
+  - LRC_MASTERPORT=6666
+  - PITCH_LRCADAPTER=10.12.0
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+  
+ shipbackground:
+  image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
+  command: -f TrafficSim -background background.json -background-count 200 --timemanaged
+  environment:
+  - LRC_MASTERHOST=pacer
+  - LRC_MASTERPORT=6666
+  - PITCH_LRCADAPTER=10.12.0
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+
+ pacer:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/pacer:pi
+  command: -f Pacer -p 6666
+  ports:
+  - "30002:8080"
+  environment:
+  - PITCH_LRCADAPTER=10.12.0
+  - ADVERTISED_ADDRESS=app-docker03.hex.tno.nl:443
+  - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
+
+networks:
+ training:  
+  driver: bridge
+  ipam:
+   config:
+   - subnet: 10.12.0.0/24
+     gateway: 10.12.0.1
