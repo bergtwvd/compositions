@@ -27,9 +27,6 @@
   - LRC_MASTERHOST=pacer
   - LRC_MASTERPORT=6666
   - constraint:node==app-docker03.hex.tno.nl
-  links:
-  - crc
-  - pacer
 
  shipsim:
   image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
@@ -38,9 +35,6 @@
   - PITCH_LRCADAPTER=ethwe
   - LRC_MASTERHOST=pacer
   - LRC_MASTERPORT=6666
-  links:
-  - crc
-  - pacer
 
  shipbackground:
   image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
@@ -49,9 +43,6 @@
   - PITCH_LRCADAPTER=ethwe
   - LRC_MASTERHOST=pacer
   - LRC_MASTERPORT=6666
-  links:
-  - crc
-  - pacer
 
  pacer:
   image: app-docker136.hex.tno.nl:443/msaas-nld/pacer:pi
@@ -63,5 +54,3 @@
   - PITCH_LRCADAPTER=ethwe
   - ADVERTISED_ADDRESS=app-docker03.hex.tno.nl:443
   - constraint:node==app-docker03.hex.tno.nl
-  links:
-  - crc
