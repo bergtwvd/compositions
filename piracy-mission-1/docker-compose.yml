@@ -26,7 +26,7 @@ services:
   
  shipsim1:
   image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
-  command: -f Ship1 -m Ship1 -latitude 26.57 -longitude 56.59 -speed 10 -course 270
+  command: -m Ship1 -latitude 26.57 -longitude 56.59 -speed 10 -course 270
 
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
