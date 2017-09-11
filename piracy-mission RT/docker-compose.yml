@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+ crc:
+  image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
+  mac_address: 00:18:8B:0D:4F:0B
+  networks:
+  - training
+ 
+ web:
+  image: app-docker136.hex.tno.nl:443/pitch/web:2.1.1
+  ports:
+  - "30003:8080"
+  networks:
+  - training
+  environment:
+  - constraint:node==app-docker03.hex.tno.nl
+  
+ vrf:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
+  mac_address: 8C:70:5A:0B:58:7E
+  hostname: mak
+  environment:
+  - PITCH_LRCADAPTER=10.13.0
+  - DISPLAY=xserver:0
+  networks:
+  - training
+  - x11
+
+ kml:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer -i http://kml:8080/kmlserver
+  networks:
+  - training
+  
+ ge:
+  image: app-docker136.hex.tno.nl:443/library/ge
+  command: -t 5 -f -r 10 Gulf http://kml:8080/kmlserver/entities 
+  environment:
+  - DISPLAY=xserver:0
+  depends_on:
+  - kml
+  networks:
+  - training
+  - x11
+  
+networks:
+ training:  
+  driver: overlay
+  ipam:
+   config:
+   - subnet: 10.13.0.0/24
+     gateway: 10.13.0.1
+ x11:
+  external:
+   name: xserver_x11
