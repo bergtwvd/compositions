@@ -38,6 +38,7 @@ services:
   command: -t 5 -f -r 10 Gulf http://kml:8080/kmlserver/entities 
   environment:
   - DISPLAY=xserver:0
+  - HTTPS_PROXY=https://proxy.tno.nl:8080
   depends_on:
   - kml
   networks:
