@@ -7,19 +7,25 @@ services:
   mac_address: 00:18:8B:0D:4F:1B
   environment:
   - DISPLAY=xserver:0
-
+  networks:
+  - training
+  
  crc:
   image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
   mac_address: 00:18:8B:0D:4F:0B
   environment:
   - DISPLAY=xserver:0
-
+  networks:
+  - training
+  
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
   - "8082:8080"
   environment:
   - constraint:node==app-docker03.hex.tno.nl
+  networks:
+  - training
 
  diswebgw:
   image: app-docker136.hex.tno.nl:443/msaas-usa/dis-web-gw:epic
@@ -29,6 +35,8 @@ services:
   - "3000:3000"
   environment:
   - affinity:container==dis
+  networks:
+  - training
   
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
@@ -44,6 +52,8 @@ services:
   command: --fom-modules-dir allrofoms --scalable
   environment:
   - MINSLEEP=5
+  networks:
+  - training
   
 # kml:
 #  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
@@ -86,3 +96,11 @@ services:
 #volumes:
 # sesdata:
 #  external: false
+
+networks:
+ training:  
+  driver: overlay
+  ipam:
+   config:
+   - subnet: 10.12.0.0/24
+     gateway: 10.12.0.1
