@@ -18,6 +18,8 @@ services:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
   - "8082:8080"
+  environment:
+  - constraint:node==app-docker03.hex.tno.nl
 
  diswebgw:
   image: app-docker136.hex.tno.nl:443/msaas-usa/dis-web-gw:epic
@@ -25,14 +27,15 @@ services:
   - "8282:8282"
   - "8283:8283"
   - "3000:3000"
-  depends_on:
-  - dis
-      
+  environment:
+  - affinity:container==dis
+  
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
   environment:
   #- ses_url=http://172.31.36.132:8080/SgjWMS/WMS
   - dis_gw_url=app-docker01.hex.tno.nl
+  - constraint:node==app-docker05.hex.tno.nl
   ports:
   - "7070:7070"
 
