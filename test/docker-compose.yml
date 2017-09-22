@@ -40,15 +40,15 @@ services:
   image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
   command: --fom-modules-dir allrofoms --scalable
 
- kml:
-  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
-  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
+# kml:
+#  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+#  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
 
- ge:
-  image: app-docker136.hex.tno.nl:443/library/ge
-  command: -f -r 10 Gulf http://kml:8080/kmlserver/entities
-  environment:
-  - DISPLAY=xserver:0
+# ge:
+#  image: app-docker136.hex.tno.nl:443/library/ge
+#  command: -f -r 10 Gulf http://kml:8080/kmlserver/entities
+#  environment:
+#  - DISPLAY=xserver:0
 
 # vrf:
 #  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
