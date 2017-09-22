@@ -42,7 +42,9 @@ services:
  shipsim:
   image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
   command: --fom-modules-dir allrofoms --scalable
-
+  environment:
+  - MINSLEEP=5
+  
 # kml:
 #  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
 #  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
