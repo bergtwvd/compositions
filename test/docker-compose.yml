@@ -7,9 +7,11 @@ services:
   mac_address: 00:18:8B:0D:4F:1B
   environment:
   - DISPLAY=xserver:0
+  - PITCH_LRCADAPTER=10.12.0
   networks:
   - training
-  
+  - disnet
+
  crc:
   image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
   mac_address: 00:18:8B:0D:4F:0B
@@ -17,7 +19,7 @@ services:
   - DISPLAY=xserver:0
   networks:
   - training
-  
+
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
@@ -33,17 +35,14 @@ services:
   - "8282:8282"
   - "8283:8283"
   - "3000:3000"
-  environment:
-  - affinity:container==dis
   networks:
-  - training
-  
+  - disnet
+
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
   environment:
-  #- ses_url=http://172.31.36.132:8080/SgjWMS/WMS
-  - dis_gw_url=app-docker01.hex.tno.nl
-  - constraint:node==app-docker05.hex.tno.nl
+  - dis_gw_url=app-docker05.hex.tno.nl
+  - constraint:node==app-docker02.hex.tno.nl
   ports:
   - "7070:7070"
 
@@ -52,38 +51,47 @@ services:
   command: --fom-modules-dir allrofoms --scalable
   environment:
   - MINSLEEP=5
+  - PITCH_LRCADAPTER=10.12.0
   networks:
   - training
-  
-# kml:
-#  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
-#  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
 
-# ge:
-#  image: app-docker136.hex.tno.nl:443/library/ge
-#  command: -f -r 10 Gulf http://kml:8080/kmlserver/entities
-#  environment:
-#  - DISPLAY=xserver:0
+ kml:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
+  environment:
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
 
-# vrf:
-#  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
-#  mac_address: 8C:70:5A:0B:58:7E
-#  hostname: mak
-#  command: -s demo -r -v
-#  environment:
-#  - DISPLAY=xserver:0
-#  - MINSLEEP=5
+ ge:
+  image: app-docker136.hex.tno.nl:443/library/ge
+  command: -f -r 10 Gulf http://kml:8080/kmlserver/entities
+  environment:
+  - DISPLAY=xserver:0
+  networks:
+  - training
+
+ vrf:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
+  mac_address: 8C:70:5A:0B:58:7E
+  hostname: mak
+  command: -s demo -r
+  environment:
+  - DISPLAY=xserver:0
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
 
 # sesdb:
 #  restart: always
 #  image: app-docker136.hex.tno.nl:443/msaas-ger/sesdatabase:gulf
 #  ports:
 #  - "5432:5432"
-#  environment: 
+#  environment:
 #  - POSTGRES_PASSWORD=postgres
 #  volumes:
-#  - sesdata:/var/lib/postgresql/data     
-    
+#  - sesdata:/var/lib/postgresql/data
+
 # ses:
 #  image: app-docker136.hex.tno.nl:443/msaas-ger/ses:gulf
 #  ports:
@@ -92,15 +100,18 @@ services:
 #  - JAVA_OPTIONS=-Xmx2048m
 #  depends_on:
 #  - sesdb
-        
+
 #volumes:
 # sesdata:
 #  external: false
 
 networks:
- training:  
+ training:
   driver: overlay
   ipam:
    config:
    - subnet: 10.12.0.0/24
      gateway: 10.12.0.1
+ disnet:
+  external:
+   name: disnet
