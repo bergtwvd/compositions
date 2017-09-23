@@ -42,6 +42,7 @@ services:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
   environment:
   - dis_gw_url=app-docker05.hex.tno.nl
+  - ses_url=http://app-docker04.hex.tno.nl:8080/SgjWMS/WMS
   - constraint:node==app-docker02.hex.tno.nl
   ports:
   - "7070:7070"
@@ -82,28 +83,30 @@ services:
   networks:
   - training
 
-# sesdb:
-#  restart: always
-#  image: app-docker136.hex.tno.nl:443/msaas-ger/sesdatabase:gulf
-#  ports:
-#  - "5432:5432"
-#  environment:
-#  - POSTGRES_PASSWORD=postgres
-#  volumes:
-#  - sesdata:/var/lib/postgresql/data
+ sesdb:
+  restart: always
+  image: app-docker136.hex.tno.nl:443/msaas-ger/sesdatabase:gulf
+  ports:
+  - "5432:5432"
+  environment:
+  - POSTGRES_PASSWORD=postgres
+  - constraint:node==app-docker04.hex.tno.nl
+  volumes:
+  - sesdata:/var/lib/postgresql/data
 
-# ses:
-#  image: app-docker136.hex.tno.nl:443/msaas-ger/ses:gulf
-#  ports:
-#  - "8080:8080"
-#  environment:
-#  - JAVA_OPTIONS=-Xmx2048m
-#  depends_on:
-#  - sesdb
+ ses:
+  image: app-docker136.hex.tno.nl:443/msaas-ger/ses:gulf
+  ports:
+  - "8080:8080"
+  environment:
+  - JAVA_OPTIONS=-Xmx2048m
+  - constraint:node==app-docker04.hex.tno.nl
+  depends_on:
+  - sesdb
 
-#volumes:
-# sesdata:
-#  external: false
+volumes:
+ sesdata:
+  external: false
 
 networks:
  training:
