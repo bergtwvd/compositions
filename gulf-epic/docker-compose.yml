@@ -13,6 +13,8 @@ services:
 
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
+  ports:
+  - "7070:7070"
   environment:
   - dis_gw_url=app-docker05.hex.tno.nl
   environment:
@@ -76,6 +78,8 @@ services:
 
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
+  ports:
+  - "8082:8080"
   environment:
   - constraint:node==app-docker03.hex.tno.nl
   networks:
