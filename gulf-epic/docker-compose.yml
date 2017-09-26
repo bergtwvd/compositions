@@ -16,8 +16,7 @@ services:
   ports:
   - "7070:7070"
   environment:
-  - dis_gw_url=app-docker03.hex.tno.nl
-  environment:
+  - dis_gw_url=app-docker05.hex.tno.nl
   - constraint:node==app-docker03.hex.tno.nl
 
 # HLA components
