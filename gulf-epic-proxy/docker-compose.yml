@@ -1,0 +1,101 @@
+version: '2'
+
+# Docker compose file where all GUI interaction is handled by a proxy
+
+services:
+
+# EPIC components
+ diswebgw:
+  image: app-docker136.hex.tno.nl:443/msaas-usa/dis-web-gw:epic
+  networks:
+  - disnet
+  - training
+
+ epic:
+  image: app-docker136.hex.tno.nl:443/epic/epic:cax
+  environment:
+  - dis_gw_url=app-docker05.hex.tno.nl
+  networks:
+  - training
+
+# HLA components
+ crc:
+  image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
+  mac_address: 00:18:8B:0D:4F:0B
+  environment:
+  - DISPLAY=xserver:0
+  networks:
+  - training
+
+ dis:
+  image: app-docker136.hex.tno.nl:443/pitch/dis:2.6.0L
+  command: -auto
+  mac_address: 00:18:8B:0D:4F:1B
+  environment:
+  - DISPLAY=xserver:0
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
+  - disnet
+  
+ shipsim:
+  image: app-docker136.hex.tno.nl:443/msaas-aus/shipsim:pi
+  command: --fom-modules-dir allrofoms --scalable
+  environment:
+  - MINSLEEP=5
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
+
+ kml:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
+  environment:
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
+
+ vrf:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/vrf:pi
+  mac_address: 8C:70:5A:0B:58:7E
+  hostname: mak
+  command: -s demo -r
+  environment:
+  - DISPLAY=xserver:0
+  - PITCH_LRCADAPTER=10.12.0
+  networks:
+  - training
+
+# General components
+ ge:
+  image: app-docker136.hex.tno.nl:443/library/ge
+  command: -f -r 10 Gulf http://kml:8080/kmlserver/entities
+  environment:
+  - DISPLAY=xserver:0
+  networks:
+  - training
+
+ xserver:
+  image: app-docker136.hex.tno.nl:443/library/xserver
+  networks:
+  - training
+
+ proxy:
+  image: app-docker136.hex.tno.nl:443/library/nginx
+  command: :diswebgw:8282:u :epic:7070 8082:xserver:8080:u
+  ports:
+  - "8282:8282"
+  - "7070:7070"
+  - "8082:8082"
+  environment:
+  - constraint:node==app-docker05.hex.tno.nl
+  networks:
+  - training
+
+networks:
+ training:
+  external:
+   name: demo_training
+ disnet:
+  external:
+   name: demo_disnet
