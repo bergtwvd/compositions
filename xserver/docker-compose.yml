@@ -11,5 +11,5 @@ services:
   - x11
 
 networks:
- x11:  
+ x11:
   driver: overlay

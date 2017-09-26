@@ -1,8 +1,0 @@
-version: '2'
-
-services:
- base-simservice:
-  environment:
-  - PITCH_LRCADAPTER=10.11.0
-  networks:
-  - training
