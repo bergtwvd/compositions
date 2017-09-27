@@ -79,8 +79,8 @@ services:
 
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
-  ports:
-  - "8082:8080"
+#  ports:
+#  - "8082:8080"
   environment:
   - constraint:node==app-docker03.hex.tno.nl
   networks:
