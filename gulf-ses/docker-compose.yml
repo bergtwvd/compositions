@@ -10,7 +10,9 @@ services:
       - constraint:node==app-docker02.hex.tno.nl
     volumes:
       - sesdata:/var/lib/postgresql/data
-
+    networks:
+      - training
+  
   ses:
     image: app-docker136.hex.tno.nl:443/msaas-ger/ses:gulf
     ports:
@@ -20,6 +22,8 @@ services:
       - constraint:node==app-docker02.hex.tno.nl
     depends_on:
       - sesdb
+    networks:
+      - training
 
 volumes:
   sesdata:
