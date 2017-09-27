@@ -18,7 +18,7 @@ services:
   environment:
   - dis_gw_url=app-docker05.hex.tno.nl
   - ses_url=http://app-docker05.hex.tno.nl:8080/SgjWMS/WMS
-  - constraint:node==app-docker03.hex.tno.nl
+#  - constraint:node==app-docker03.hex.tno.nl
 
 # HLA components
  crc:
@@ -88,8 +88,9 @@ services:
 
  proxy:
   image: app-docker136.hex.tno.nl:443/library/proxy
-  command: :diswebgw:8282:ws 8082:xserver:8080:ws
+  command: :diswebgw:8282:ws 8082:xserver:8080:ws epic:7070
   ports:
+  - "7070:7070"
   - "8282:8282"
   - "8082:8082"
   environment:
