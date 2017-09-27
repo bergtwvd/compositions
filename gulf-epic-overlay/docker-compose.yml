@@ -100,7 +100,7 @@ services:
 networks:
  training:
   external:
-   name: demo_training
+   name: gulfnetwork_training
  disnet:
   external:
-   name: demo_disnet
+   name: gulfnetword_disnet

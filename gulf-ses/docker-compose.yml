@@ -44,4 +44,4 @@ volumes:
 networks:
  training:
   external:
-   name: demo_training
+   name: gulfnetwork_training
