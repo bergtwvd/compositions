@@ -13,8 +13,8 @@ services:
 
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
-  ports:
-  - "7070:7070"
+#  ports:
+#  - "7070:7070"
   environment:
   - dis_gw_url=app-docker05.hex.tno.nl
   - ses_url=http://app-docker05.hex.tno.nl:8080/SgjWMS/WMS
