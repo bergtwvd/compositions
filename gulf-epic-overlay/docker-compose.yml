@@ -1,6 +1,6 @@
 version: '2'
 
-# Docker compose file where all GUI interaction is handled by a proxy
+# Docker compose file where all UI interaction is handled by a proxy
 
 services:
 
@@ -8,17 +8,14 @@ services:
  diswebgw:
   image: app-docker136.hex.tno.nl:443/msaas-usa/dis-web-gw:epic
   networks:
-  - disnet
   - training
+  - disnet
 
  epic:
   image: app-docker136.hex.tno.nl:443/epic/epic:cax
-#  ports:
-#  - "7070:7070"
   environment:
   - dis_gw_url=app-docker05.hex.tno.nl
   - ses_url=http://app-docker05.hex.tno.nl:8080/SgjWMS/WMS
-#  - constraint:node==app-docker03.hex.tno.nl
   networks:
   - training
   
@@ -81,8 +78,6 @@ services:
 
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
-#  ports:
-#  - "8082:8080"
   environment:
   - constraint:node==app-docker03.hex.tno.nl
   networks:
@@ -97,8 +92,6 @@ services:
   - "8082:8082"
   environment:
   - constraint:node==app-docker05.hex.tno.nl
-  depends_on:
-  - epic
   networks:
   - training
 
