@@ -25,6 +25,16 @@ services:
     networks:
       - training
 
+  proxy:
+    image: app-docker136.hex.tno.nl:443/library/proxy
+    command: :ses:8080
+    ports:
+      - "8080:8080"
+    environment:
+      - constraint:node==app-docker05.hex.tno.nl
+    networks:
+      - training
+      
 volumes:
   sesdata:
     external: false

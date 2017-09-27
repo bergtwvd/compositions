@@ -88,10 +88,9 @@ services:
 
  proxy:
   image: app-docker136.hex.tno.nl:443/library/proxy
-  command: :diswebgw:8282:ws :ses:8080 8082:xserver:8080:ws
+  command: :diswebgw:8282:ws 8082:xserver:8080:ws
   ports:
   - "8282:8282"
-  - "8080:8080"
   - "8082:8082"
   environment:
   - constraint:node==app-docker05.hex.tno.nl
