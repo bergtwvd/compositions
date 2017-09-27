@@ -103,4 +103,4 @@ networks:
    name: gulfnetwork_training
  disnet:
   external:
-   name: gulfnetword_disnet
+   name: gulfnetwork_disnet
