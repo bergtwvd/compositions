@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  sesdb:
+    restart: always
+    image: app-docker136.hex.tno.nl:443/msaas-ger/sesdatabase:gulf
+    #command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - constraint:node==app-docker02.hex.tno.nl
+    volumes:
+      - sesdata:/var/lib/postgresql/data
+
+  ses:
+    image: app-docker136.hex.tno.nl:443/msaas-ger/ses:gulf
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTIONS=-Xmx2048m
+      - constraint:node==app-docker02.hex.tno.nl
+    depends_on:
+      - sesdb
+
+volumes:
+  sesdata:
+    external: false
