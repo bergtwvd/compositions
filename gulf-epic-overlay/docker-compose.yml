@@ -88,7 +88,7 @@ services:
 
  proxy:
   image: app-docker136.hex.tno.nl:443/library/proxy
-  command: :diswebgw:8282:ws 8082:xserver:8080:ws epic:7070
+  command: :diswebgw:8282:ws 8082:xserver:8080:ws :epic:7070
   ports:
   - "7070:7070"
   - "8282:8282"
