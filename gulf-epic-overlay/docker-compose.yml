@@ -45,6 +45,7 @@ services:
   command: --fom-modules-dir allrofoms --scalable
   environment:
   - PITCH_LRCADAPTER=10.12.0
+  - MINSLEEP=10
   networks:
   - training
 
