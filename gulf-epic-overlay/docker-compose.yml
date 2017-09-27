@@ -19,7 +19,9 @@ services:
   - dis_gw_url=app-docker05.hex.tno.nl
   - ses_url=http://app-docker05.hex.tno.nl:8080/SgjWMS/WMS
 #  - constraint:node==app-docker03.hex.tno.nl
-
+  networks:
+  - training
+  
 # HLA components
  crc:
   image: app-docker136.hex.tno.nl:443/pitch/crc:5.3.0.0L
@@ -95,6 +97,8 @@ services:
   - "8082:8082"
   environment:
   - constraint:node==app-docker05.hex.tno.nl
+  depends_on:
+  - epic
   networks:
   - training
 
