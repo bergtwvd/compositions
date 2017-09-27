@@ -22,3 +22,8 @@ services:
 volumes:
   sesdata:
     external: false
+
+networks:
+ training:
+  external:
+   name: demo_training
