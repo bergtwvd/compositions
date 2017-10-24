@@ -35,7 +35,10 @@ services:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
   - "8080:8080"
-
+  environment:
+  - DISPLAY_WIDTH=1920
+  - DISPLAY_HEIGHT=1080
+  
  kml:
   image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
   command: -f KMLServer
