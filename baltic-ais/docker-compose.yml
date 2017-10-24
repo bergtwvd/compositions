@@ -29,21 +29,21 @@ services:
   environment:
   - PITCH_CRCADDRESS=XXX@booster:8688
   ports:
-  - "9001:9001"
+  - "443:9001"
   
  xserver:
   image: app-docker136.hex.tno.nl:443/library/xserver
   ports:
   - "8080:8080"
 
-# kml:
-#  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:2-pi
-#  command: -f KMLServer -iconurl http://kml:8080/kmlserver -d rofoms
-#  environment:
-#  - PITCH_CRCADDRESS=XXX@booster:8688
+ kml:
+  image: app-docker136.hex.tno.nl:443/msaas-nld/kmlserver:pi
+  command: -f KMLServer
+  environment:
+  - PITCH_CRCADDRESS=XXX@booster:8688
 
-# ge:
-#  image: app-docker136.hex.tno.nl:443/library/ge
-#  command: -f -r 10 Baltic http://kml:8080/kmlserver/entities 
-#  environment:
-#  - DISPLAY=xserver:0
+ ge:
+  image: app-docker136.hex.tno.nl:443/library/ge
+  command: -f -r 10 Baltic http://kml:8080/kmlserver/entities 
+  environment:
+  - DISPLAY=xserver:0
